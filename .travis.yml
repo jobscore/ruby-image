@@ -1,34 +1,31 @@
 language: python
 sudo: required
 dist: trusty
-
 cache:
-  - pip
-  - ansible-galaxy
-
+- pip
+- ansible-galaxy
 env:
-  - PACKER_VER=1.1.0
-
+- PACKER_VER=1.1.0
 services:
-  - docker
-
+- docker
 before_script:
-  - sudo rm -rf /usr/local/bin/packer
-  - sudo apt-get update
-  - sudo apt-get install -y golang-go libssl-dev git-core python python-apt wget unzip
-  - pip install -r requirements.txt
-  - ansible-galaxy install -r requirements.yml -p roles
-  - wget https://releases.hashicorp.com/packer/"$PACKER_VER"/packer_"$PACKER_VER"_linux_amd64.zip
-  - sudo unzip packer_"$PACKER_VER"_linux_amd64.zip -d /usr/local/bin
-  - echo "Branch -> $TRAVIS_BRANCH"
-  - packer --version
-  - ansible --version
-  - docker --version
-  - packer validate packer.json
-  - ansible-playbook playbook.yml --syntax-check
-
+- sudo rm -rf /usr/local/bin/packer
+- sudo apt-get update
+- sudo apt-get install -y golang-go libssl-dev git-core python python-apt wget unzip
+- pip install -r requirements.txt
+- ansible-galaxy install -r requirements.yml -p roles
+- wget https://releases.hashicorp.com/packer/"$PACKER_VER"/packer_"$PACKER_VER"_linux_amd64.zip
+- sudo unzip packer_"$PACKER_VER"_linux_amd64.zip -d /usr/local/bin
+- echo "Branch -> $TRAVIS_BRANCH"
+- packer --version
+- ansible --version
+- docker --version
+- packer validate packer.json
+- ansible-playbook playbook.yml --syntax-check
 script:
-  - python builder.py
-
+- travis_wait 30 python builder.py
 notifications:
   email: false
+  slack:
+    rooms:
+      secure: fATT0YkPADYhAj2FmF0PqPIrY5dn6GPoxVYnl335aNHHOfdTV1JPmy4i1ed8KscT/CzlSaWGs6HZCgbWLf3xpOrYzq4OyPIP52CxjKqDCcG6vQaAAKysAjMhlJOayayICvGwaYPdLe32VKygh4NWGvAlGg54wyJVvehmFAi9qdBn0Pm84ZxrOGMrHYYp5smAzBmYL7T4PVz6+C2/inZLNfd2gPfkgaHloZUDRDnkQkOEqxVNbpOz0QyG5PFwsCD8WllJKFQpAjGKYITp8nVIaX2PW1KIsYk8VyxpSpZkg+QW24r9N0S5E9WE02wre86woBxsIc57czH6+8CMlikf+eesLrV5xQeETXtjKgMngj0D0VGBxlTpf5WU6aTmHDIkjkt8/PQR21TGtoyxMHxdOrA8qpwXkmlH86VjItDbfueGJrG2MvTOAkW+uQb/gkuqBuDkdMMpbNh3ucTXNEgRxXZQVrcs2Ebh7FlcPzCRQXiTzJAWetCghS+Bt9A7tMG7TAWsqMIbrYddFWl2Qqg/bg2cCmiFuAsn8DdN3+Vk4rxwkq5e1aBngz/qsDqS0eAMg6YkrDNzxGzPBIHnhiuBy9IcFyH4BE+nKgqKqVhpIg2cbe+cB9oBJtxbLoddm3MOF0KlPyZpuJEjPnqSrKaq5QyoJ7WjfNycFWtWuHBztP4=
