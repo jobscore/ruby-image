@@ -13,7 +13,7 @@
     remote_src: yes
     mode: 0775
 
-- name: Install ruby
+- name: Install node
   shell: "{{ item }}"
   args:
     chdir: "/tmp/node-v{{ node_version }}"
