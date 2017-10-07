@@ -1,0 +1,23 @@
+--- # Install ruby
+
+- name: Get ruby
+  get_url:
+    url: "https://cache.ruby-lang.org/pub/ruby/{{ ruby_version[:-2] }}/ruby-{{ ruby_version }}.tar.gz"
+    dest: /tmp/ruby.tar.gz
+    validate_certs: no
+
+- name: Unarchive ruby
+  unarchive:
+    src: /tmp/ruby.tar.gz
+    dest: /tmp
+    remote_src: yes
+    mode: 0775
+
+- name: Install ruby
+  shell: "{{ item }}"
+  args:
+    chdir: "/tmp/ruby-{{ ruby_version }}"
+  with_items:
+    - ./configure
+    - make
+    - make install

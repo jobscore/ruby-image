@@ -1,0 +1,82 @@
+{
+  "variables": {
+    "release_ver": "{{ env `RELEASE_VER` }}",
+    "email": "{{ env `EMAIL` }}",
+    "login_user": "{{ env `DOCKER_USER` }}",
+    "login_pass": "{{ env `DOCKER_PASS` }}"
+  },
+  "builders": [
+    {
+      "name": "docker-ruby",
+      "type": "docker",
+      "image": "ubuntu:trusty",
+      "commit": true,
+      "author": "{{ user `EMAIL` }}",
+      "changes":[
+        "LABEL version={{ user `release_ver` }}",
+        "LABEL maintainer='{{ user `EMAIL` }}'",
+        "LABEL description='Ruby image for Dev/Test'",
+        "VOLUME /code",
+        "WORKDIR /code"
+      ]
+    },
+    {
+      "name": "testing",
+      "type": "docker",
+      "image": "ubuntu:trusty",
+      "commit": true,
+      "author": "{{ user `EMAIL` }}",
+      "changes":[
+        "LABEL version={{ user `release_ver` }}",
+        "LABEL maintainer='{{ user `EMAIL` }}'",
+        "LABEL description='Ruby image for Dev/Test'",
+        "VOLUME /code",
+        "WORKDIR /code"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get update",
+        "apt-get install -y python"
+      ]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [
+        "-e",
+        "ansible_python_interpreter=/usr/bin/python"
+      ],
+      "groups": [
+        "ruby"
+      ],
+      "host_alias": "{{ build_name }}"
+    },
+    {
+      "type": "shell",
+      "inline":[
+        "ln -sf /dev/stdout /var/log/nginx/access.log",
+        "ln -sf /dev/stderr /var/log/nginx/error.log"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "jobscoreci/ruby",
+        "tag": "{{ user `release_ver` }}"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{ user `login_user`}}",
+        "login_password": "{{ user `login_pass`}}",
+        "only": ["docker-ruby"]
+      }
+    ]
+  ]
+}

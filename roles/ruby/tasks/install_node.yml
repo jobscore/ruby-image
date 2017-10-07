@@ -1,0 +1,23 @@
+--- # Install nodejs
+
+- name: Get node
+  get_url:
+    url: "https://nodejs.org/dist/v{{ node_version }}/node-v{{ node_version }}.tar.gz"
+    dest: /tmp/node.tar.gz
+    validate_certs: no
+
+- name: Unarchive node
+  unarchive:
+    src: /tmp/node.tar.gz
+    dest: /tmp
+    remote_src: yes
+    mode: 0775
+
+- name: Install ruby
+  shell: "{{ item }}"
+  args:
+    chdir: "/tmp/node-v{{ node_version }}"
+  with_items:
+    - ./configure
+    - make
+    - make install

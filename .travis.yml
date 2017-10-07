@@ -1,0 +1,34 @@
+language: python
+sudo: required
+dist: trusty
+
+cache:
+  - pip
+  - ansible-galaxy
+
+env:
+  - PACKER_VER=1.1.0
+
+services:
+  - docker
+
+before_script:
+  - sudo rm -rf /usr/local/bin/packer
+  - sudo apt-get update
+  - sudo apt-get install -y golang-go libssl-dev git-core python python-apt wget unzip
+  - pip install -r requirements.txt
+  - ansible-galaxy install -r requirements.yml -p roles
+  - wget https://releases.hashicorp.com/packer/"$PACKER_VER"/packer_"$PACKER_VER"_linux_amd64.zip
+  - sudo unzip packer_"$PACKER_VER"_linux_amd64.zip -d /usr/local/bin
+  - echo "Branch -> $TRAVIS_BRANCH"
+  - packer --version
+  - ansible --version
+  - docker --version
+  - packer validate packer.json
+  - ansible-playbook playbook.yml --syntax-check
+
+script:
+  - python builder.py
+
+notifications:
+  email: false
