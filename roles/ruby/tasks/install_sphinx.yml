@@ -1,0 +1,26 @@
+--- # Install Sphinx
+
+- name: Get Sphinx
+  get_url:
+    url: "http://sphinxsearch.com/files/sphinx-{{ sphinx_version }}-release.tar.gz"
+    dest: /tmp/sphinx.tar.gz
+    validate_certs: no
+
+- name: Unarchive Sphinx
+  unarchive:
+    src: /tmp/sphinx.tar.gz
+    dest: /tmp
+    remote_src: yes
+    mode: 0775
+
+- name: Install Sphinx
+  shell: "{{ item }}"
+  args:
+    chdir: "/tmp/sphinx-{{ sphinx_version }}-release"
+  with_items:
+    - >
+      ./configure --prefix=/usr/local --localstatedir=/usr/local/var
+      --with-pgsql --with-libstemmer --disable-dependency-tracking
+      --without-mysql
+    - make
+    - make install
