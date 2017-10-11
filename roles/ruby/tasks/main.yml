@@ -7,6 +7,4 @@
 - include: install_sphinx.yml
 
 - name: Cleanup temp files
-  file:
-    path: /tmp/
-    state: absent
+  shell: "rm -rf /tmp/*"
