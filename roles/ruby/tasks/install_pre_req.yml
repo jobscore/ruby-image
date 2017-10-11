@@ -35,3 +35,4 @@
     - g++
     - clang-3.5
     - imagemagick
+    - libstemmer-dev
