@@ -23,7 +23,7 @@ before_script:
 - packer validate packer.json
 - ansible-playbook playbook.yml --syntax-check
 script:
-- travis_wait 35 python builder.py
+- travis_wait 40 python builder.py
 notifications:
   email: false
   slack:
