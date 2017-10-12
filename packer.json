@@ -54,13 +54,6 @@
         "ruby"
       ],
       "host_alias": "{{ build_name }}"
-    },
-    {
-      "type": "shell",
-      "inline":[
-        "ln -sf /dev/stdout /var/log/nginx/access.log",
-        "ln -sf /dev/stderr /var/log/nginx/error.log"
-      ]
     }
   ],
   "post-processors": [
