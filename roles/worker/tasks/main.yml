@@ -1,9 +1,7 @@
 ---
 # tasks file for jobscore_app
 - include: install_pre_req.yml
-- include: install_ruby.yml
 - include: install_node.yml
-- include: install_passenger.yml
 - include: install_sphinx.yml
 
 - name: Cleanup temp files
