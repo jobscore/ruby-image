@@ -26,7 +26,7 @@
     - build-essential
     - libmysqlclient-dev
     - libssl-dev
-    - git-core
+    - git
     - wget
     - tzdata
     - libreadline-dev
@@ -36,3 +36,13 @@
     - clang-3.5
     - imagemagick
     - libstemmer-dev
+    - ca-certificates
+    - curl
+    - libc6-dev
+    - libreadline6-dev
+    - libsqlite3-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libyaml-dev
+    - make
+    - sqlite3
